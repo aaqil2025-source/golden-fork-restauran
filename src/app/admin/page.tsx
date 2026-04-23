@@ -1,20 +1,33 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { supabase, Order } from '@/lib/supabase';
+import { supabase, Order, OrderItem } from '@/lib/supabase';
 
 export default function AdminPage() {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [orderItems, setOrderItems] = useState<Record<number, OrderItem[]>>({});
   const [loading, setLoading] = useState(true);
 
   const fetchOrders = async () => {
-    const { data, error } = await supabase
+    const { data: ordersData, error } = await supabase
       .from('orders')
       .select('*')
       .order('created_at', { ascending: false });
 
-    if (!error && data) {
-      setOrders(data);
+    if (!error && ordersData) {
+      setOrders(ordersData);
+      
+      const itemsData: Record<number, OrderItem[]> = {};
+      for (const order of ordersData) {
+        const { data: items } = await supabase
+          .from('order_items')
+          .select('*')
+          .eq('order_id', order.id);
+        if (items) {
+          itemsData[order.id!] = items;
+        }
+      }
+      setOrderItems(itemsData);
     }
     setLoading(false);
   };
@@ -56,7 +69,18 @@ export default function AdminPage() {
                 <div>Total: ₹{order.total}</div>
                 <div>{new Date(order.created_at || '').toLocaleTimeString()}</div>
               </div>
+              {orderItems[order.id!] && orderItems[order.id!].length > 0 && (
+                <div className="order-items-list">
+                  <strong>Items:</strong>
+                  <ul>
+                    {orderItems[order.id!].map((item) => (
+                      <li key={item.id}>{item.item_name} x{item.qty} - ₹{item.price * item.qty}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               <div className="order-actions">
+                <button onClick={() => updateStatus(order.id!, 'pending')}>Pending</button>
                 <button onClick={() => updateStatus(order.id!, 'preparing')}>Preparing</button>
                 <button onClick={() => updateStatus(order.id!, 'ready')}>Ready</button>
                 <button onClick={() => updateStatus(order.id!, 'done')}>Done</button>
