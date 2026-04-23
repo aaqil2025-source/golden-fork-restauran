@@ -5,6 +5,7 @@ import { menuItems, categories, categoryNames } from '@/data/menu';
 import { useCart } from './CartContext';
 import MenuItemCard from './MenuItemCard';
 import CartPanel from './CartPanel';
+import ScrollAnimation from './ScrollAnimation';
 
 export default function MenuPage() {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -19,6 +20,7 @@ export default function MenuPage() {
 
   return (
     <>
+      <ScrollAnimation />
       {/* Hero */}
       <header className="hero">
         <div className="fork-icon">🍴</div>
