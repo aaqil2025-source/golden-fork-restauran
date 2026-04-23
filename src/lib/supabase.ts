@@ -11,7 +11,7 @@ export interface Order {
   customer_name: string;
   total: number;
   status: 'pending' | 'preparing' | 'ready' | 'done';
-  order_type: 'pickup' | 'delivery';
+  order_type: 'pickup' | 'delivery' | 'dine-in';
   created_at?: string;
 }
 
