@@ -14,10 +14,16 @@ export default function CartPanel({ tableNo, onClose }: CartPanelProps) {
   const [ordered, setOrdered] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [customerName, setCustomerName] = useState('');
+  const [orderType, setOrderType] = useState('pickup');
   const items = Object.values(cart);
   const gst = Math.round(totalPrice * 0.05);
 
   const placeOrder = async () => {
+    if (!customerName.trim()) {
+      setError('Please enter your name');
+      return;
+    }
     setLoading(true);
     setError('');
     try {
@@ -25,10 +31,10 @@ export default function CartPanel({ tableNo, onClose }: CartPanelProps) {
         .from('orders')
         .insert([{
           table_no: tableNo,
-          customer_name: '',
+          customer_name: customerName.trim(),
           total: totalPrice + gst,
           status: 'pending',
-          order_type: 'pickup'
+          order_type: orderType
         }])
         .select()
         .single();
@@ -50,6 +56,7 @@ export default function CartPanel({ tableNo, onClose }: CartPanelProps) {
 
       setOrdered(true);
       clearCart();
+      setCustomerName('');
       setTimeout(() => {
         setOrdered(false);
         onClose();
@@ -70,7 +77,7 @@ export default function CartPanel({ tableNo, onClose }: CartPanelProps) {
             <div className="success-icon">✓</div>
             <div className="success-msg">Order Placed!</div>
             <div className="success-sub">
-              Table {tableNo} · {`Your food is being prepared!`}
+              {customerName} · Table {tableNo} · {orderType === 'pickup' ? 'Pickup' : 'Delivery'}
             </div>
           </div>
         ) : (
@@ -84,6 +91,24 @@ export default function CartPanel({ tableNo, onClose }: CartPanelProps) {
               <div className="empty-cart">Your order is empty.<br />Add some dishes to get started!</div>
             ) : (
               <>
+                <div className="customer-info">
+                  <input
+                    type="text"
+                    placeholder="Enter your name"
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    className="customer-name-input"
+                  />
+                  <select 
+                    value={orderType} 
+                    onChange={(e) => setOrderType(e.target.value)}
+                    className="order-type-select"
+                  >
+                    <option value="pickup">Pickup</option>
+                    <option value="delivery">Delivery</option>
+                  </select>
+                </div>
+
                 <div className="cart-items">
                   {items.map(({ item, qty }: CartItem) => (
                     <div key={item.id} className="cart-item">

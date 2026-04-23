@@ -240,6 +240,15 @@ html, body { background: var(--bg); color: var(--text); font-family: 'Lato', san
 .cart-item-qty { display: flex; align-items: center; gap: 0.6rem; margin: 0 0.8rem; }
 .cart-item-price { font-size: 0.95rem; color: var(--gold); font-weight: 700; min-width: 60px; text-align: right; }
 .cart-totals { margin-top: 0.5rem; }
+.customer-info { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+.customer-name-input { flex: 1; background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text); padding: 0.6rem 0.8rem; border-radius: 8px; font-family: 'Lato', sans-serif; font-size: 0.9rem; }
+.customer-name-input::placeholder { color: var(--text-dim); }
+.customer-name-input:focus { outline: none; border-color: var(--gold); }
+.order-type-select { background: var(--bg-input); border: 1px solid var(--border-gold); color: var(--text); padding: 0.6rem 0.8rem; border-radius: 8px; font-family: 'Lato', sans-serif; font-size: 0.9rem; cursor: pointer; }
+.order-items-list { margin: 0.8rem 0; padding: 0.8rem; background: #111; border-radius: 8px; }
+.order-items-list strong { color: var(--gold); font-size: 0.85rem; }
+.order-items-list ul { margin: 0.5rem 0 0 1rem; padding: 0; }
+.order-items-list li { color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; }
 .subtotal-row { font-size: 0.8rem; color: var(--text-dim); display: flex; justify-content: space-between; padding: 0.3rem 0; }
 .cart-total { display: flex; justify-content: space-between; padding: 0.8rem 0; font-size: 1.1rem; font-weight: 700; color: var(--text); border-top: 1px solid #2a2a2a; margin-top: 0.4rem; }
 .place-order-btn {
