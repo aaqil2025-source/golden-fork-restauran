@@ -106,6 +106,7 @@ export default function CartPanel({ tableNo, onClose }: CartPanelProps) {
                   >
                     <option value="pickup">Pickup</option>
                     <option value="delivery">Delivery</option>
+                    <option value="dine-in">Dine In</option>
                   </select>
                 </div>
 
